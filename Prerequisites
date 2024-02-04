@@ -1,0 +1,31 @@
+Before running the script, make sure you have the following:
+
+Python 3 installed on your system
+MongoDB installed and running locally or remotely
+PostgreSQL installed and running locally or remotely
+A YouTube Data API key (Instructions: https://developers.google.com/youtube/registering_an_application)
+
+Installation
+Clone the repository:
+git clone https://github.com/your-username/YouTube-Data-Harvesting.git
+
+Install dependencies:
+pip install -r requirements.txt
+
+Set up MongoDB and PostgreSQL databases.
+
+Obtain a YouTube API key and replace "YOUR_API_KEY" in the script with your actual API key.
+
+Update PostgreSQL connection details (host, user, password, database, port) in the script according to your setup.
+
+Usage
+Run the Python script:
+
+Access the Streamlit web application by opening the provided URL in your browser.
+
+Enter the YouTube channel ID and click "Fetch data" to fetch data from the specified channel.
+
+Click "Insert to SQL" to migrate the fetched data to the PostgreSQL data warehouse.
+
+Use the Streamlit interface to view tables, select predefined SQL queries, and display query results.
+
