@@ -30,12 +30,12 @@ Description: Streamlit is an open-source Python library for building interactive
 Usage in Project: Streamlit is used in this project to create a user-friendly web interface for interacting with the fetched YouTube data and querying the PostgreSQL data warehouse. It facilitates the creation of interactive data visualization components, such as tables and dropdown menus, and enables seamless deployment of the web application for data exploration and analysis.
 
 Key Features
-•	Fetch channel information (name, ID, subscription count, views, total videos, description, etc.)
-•	Fetch playlist information (ID, title, channel ID, channel name, published date, video count)
-•	Fetch video information (ID, title, channel name, tags, thumbnail, description, published date, duration, views, likes, comments, favorite count, definition, caption status)
-•	Fetch comment information (ID, video ID, comment text, author, published date)
-•	Store data in MongoDB collections
-•	Migrate data to a PostgreSQL database with predefined tables
-•	Display data using a Streamlit web application
-•	Execute predefined SQL queries against the PostgreSQL data warehousecation.
+* Fetch channel information (name, ID, subscription count, views, total videos, description, etc.)
+* Fetch playlist information (ID, title, channel ID, channel name, published date, video count)
+* Fetch video information (ID, title, channel name, tags, thumbnail, description, published date, duration, views, likes, comments, favorite count, definition, caption status)
+*	Fetch comment information (ID, video ID, comment text, author, published date)
+* Store data in MongoDB collections
+*	Migrate data to a PostgreSQL database with predefined tables
+*	Display data using a Streamlit web application
+*	Execute predefined SQL queries against the PostgreSQL data warehousecation.
 
