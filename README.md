@@ -3,11 +3,11 @@ OVERVIEW
 This Python script fetches data from YouTube channels, playlists, videos, and comments using the YouTube API. It stores the data in a MongoDB database and migrates it to a PostgreSQL data warehouse. The fetched data can be analyzed and displayed using a Streamlit web app YouTube Data Harvesting and Warehousing
 
 ACKNOWLEDGEMENTS
-*Google APIs Client Library for Python
-*MongoDB
-*Psycopg - PostgreSQL adapter for Python
-*Pandas
-*Streamlit
+* Google APIs Client Library for Python
+* MongoDB
+* Psycopg - PostgreSQL adapter for Python
+* Pandas
+* Streamlit
 
 GOOGLE APIS CLIENT LIBRARY FOR PYTHON:
 Description: The Google APIs Client Library for Python is a client library for accessing Google APIs, including the YouTube Data API used in this project. It simplifies the process of making requests to Google APIs and handling responses.
