@@ -1,4 +1,5 @@
 YOUTUBE DATA HARVESTING AND WAREHOUSING
+
 OVERVIEW
 This Python script fetches data from YouTube channels, playlists, videos, and comments using the YouTube API. It stores the data in a MongoDB database and migrates it to a PostgreSQL data warehouse. The fetched data can be analyzed and displayed using a Streamlit web app YouTube Data Harvesting and Warehousing
 
