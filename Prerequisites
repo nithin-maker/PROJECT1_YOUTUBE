@@ -12,6 +12,14 @@ git clone https://github.com/your-username/YouTube-Data-Harvesting.git
 * Install dependencies:
 pip install -r requirements.txt
 
+Import the Required libraries
+
+google-api-python-client
+pymongo
+psycopg2
+streamlit
+pandas
+
 * Set up MongoDB and PostgreSQL databases.
 
 * Obtain a YouTube API key and replace "YOUR_API_KEY" in the script with your actual API key.
