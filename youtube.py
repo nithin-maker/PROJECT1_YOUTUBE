@@ -1,5 +1,3 @@
-#importing Required Packages 
-
 from googleapiclient.discovery import build
 import pymongo
 import psycopg2 
@@ -22,11 +20,11 @@ youtube=Api_connect()
 
 #To fetch channel information
 def get_channel_info(channel_id):
-    
+
     request = youtube.channels().list(
                 part = "snippet,contentDetails,Statistics",
                 id = channel_id)
-            
+
     response1=request.execute()
 
     for i in range(0,len(response1["items"])):
@@ -44,7 +42,7 @@ def get_channel_info(channel_id):
 
 
 # To fetch playlist information
-    
+
 def get_playlist_info(channel_id):
     All_data = []
     next_page_token = None
@@ -71,7 +69,7 @@ def get_playlist_info(channel_id):
         if next_page_token is None:
             next_page=False
     return All_data
-    
+
 #To fetch video information
 
 
@@ -82,18 +80,18 @@ def get_channel_videos(channel_id):
                                   part='contentDetails').execute()
     playlist_id = res['items'][0]['contentDetails']['relatedPlaylists']['uploads']
     next_page_token = None
-    
+
     while True:
         res = youtube.playlistItems().list( 
                                            part = 'snippet',
                                            playlistId = playlist_id, 
                                            maxResults = 50,
                                            pageToken = next_page_token).execute()
-        
+
         for i in range(len(res['items'])):
             video_ids.append(res['items'][i]['snippet']['resourceId']['videoId'])
         next_page_token = res.get('nextPageToken')
-        
+
         if next_page_token is None:
             break
     return video_ids
@@ -123,7 +121,7 @@ def get_video_info(video_ids):
                         Duration = item['contentDetails']['duration'],
                         Views = item['statistics']['viewCount'],
                         Likes = item['statistics'].get('likeCount'),
-                         Comments = item['statistics'].get('commentCount'),
+                        Comments = item['statistics'].get('commentCount'),
                         Favorite_Count = item['statistics']['favoriteCount'],
                         Definition = item['contentDetails']['definition'],
                         Caption_Status = item['contentDetails']['caption']
@@ -145,7 +143,7 @@ def get_comment_info(video_ids):
                                 maxResults = 50
                                 )
                         response5 = request.execute()
-                        
+
                         for item in response5["items"]:
                                 comment_information = dict(
                                         Comment_Id = item["snippet"]["topLevelComment"]["id"],
@@ -157,7 +155,7 @@ def get_comment_info(video_ids):
                                 Comment_Information.append(comment_information)
         except:
                 pass
-                
+
         return Comment_Information
 
 
@@ -183,7 +181,7 @@ def channel_details(channel_id):
 #Table creation for Cahnnels
 
 def channels_table():
-        
+
     mydb = psycopg2.connect(host="localhost",
             user="postgres",
             password="nithiv1201",
@@ -192,6 +190,9 @@ def channels_table():
             )
     cursor = mydb.cursor()
 
+    drop_query = "drop table if exists channels"
+    cursor.execute(drop_query)
+    mydb.commit()
 
     create_query = '''create table if not exists channels(Channel_Name varchar(100),
                         Channel_Id varchar(80) primary key, 
@@ -203,11 +204,9 @@ def channels_table():
     cursor.execute(create_query)
     mydb.commit()
 
-    drop_query = "drop table if exists playlists"
-    cursor.execute(drop_query)
-    mydb.commit()
+   
 
-      
+
 
     ch_list = []
     db = client["Youtube_data"]
@@ -225,7 +224,7 @@ def channels_table():
                                                     Channel_Description,
                                                     Playlist_Id)
                                         VALUES(%s,%s,%s,%s,%s,%s,%s)'''
-            
+
 
         values =(
                 row['Channel_Name'],
@@ -235,13 +234,13 @@ def channels_table():
                 row['Total_Videos'],
                 row['Channel_Description'],
                 row['Playlist_Id'])
-                            
+
         cursor.execute(insert_query,values)
         mydb.commit()    
-        
+
 
 #Table creation for playlits
-            
+
 def playlists_table():
     mydb = psycopg2.connect(host="localhost",
             user="postgres",
@@ -255,9 +254,9 @@ def playlists_table():
     cursor.execute(drop_query)
     mydb.commit()
 
-    
+
     create_query = '''create table if not exists playlists(PlaylistId varchar(100) primary key,
-                        Title varchar(80), 
+                        Title Text, 
                         ChannelId varchar(100), 
                         ChannelName varchar(100),
                         PublishedAt timestamp,
@@ -265,7 +264,7 @@ def playlists_table():
                         )'''
     cursor.execute(create_query)
     mydb.commit()
-       
+
 
 
     db = client["Youtube_data"]
@@ -291,8 +290,8 @@ def playlists_table():
                 row['ChannelName'],
                 row['PublishedAt'],
                 row['VideoCount'])
-                
-                        
+
+
         cursor.execute(insert_query,values)
         mydb.commit()    
 
@@ -308,8 +307,13 @@ def videos_table():
                 )
     cursor = mydb.cursor()
 
+    drop_query = "drop table if exists videos"
+    cursor.execute(drop_query)
+    mydb.commit()
 
-    
+
+
+
     create_query = '''create table if not exists videos(
                         Channel_Name varchar(150),
                         Channel_Id varchar(100),
@@ -327,10 +331,11 @@ def videos_table():
                         Definition varchar(10), 
                         Caption_Status varchar(50) 
                         )''' 
-                        
+
     cursor.execute(create_query)             
     mydb.commit()
-    
+
+   
 
     vi_list = []
     db = client["Youtube_data"]
@@ -339,7 +344,7 @@ def videos_table():
         for i in range(len(vi_data["video_information"])):
             vi_list.append(vi_data["video_information"][i])
     df2 = pd.DataFrame(vi_list)
-        
+
 
     for index, row in df2.iterrows():
         insert_query = '''
@@ -360,7 +365,6 @@ def videos_table():
                         Caption_Status 
                         )
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-
                 ''' 
         values = (
                     row['Channel_Name'],
@@ -378,13 +382,13 @@ def videos_table():
                     row['Favorite_Count'],
                     row['Definition'],
                     row['Caption_Status'])
-                        
+
         cursor.execute(insert_query,values)             
         mydb.commit()    
-                                
+
 
 #Table creation for comments
-    
+
 def comments_table():
     mydb = psycopg2.connect(host="localhost",
                 user="postgres",
@@ -422,7 +426,6 @@ def comments_table():
                                         Comment_Author,
                                         Comment_Published)
                 VALUES (%s, %s, %s, %s, %s)
-
             '''
             values = (
                 row['Comment_Id'],
@@ -432,10 +435,10 @@ def comments_table():
                 row['Comment_Published']
             )
 
-            
+
             cursor.execute(insert_query,values)
             mydb.commit()
-        
+
 
 def tables():
     channels_table()
@@ -497,7 +500,7 @@ with sl.sidebar:
     sl.caption("Migrate data to a SQL data warehouse")
     sl.caption("Query the SQL data warehouse")
     sl.caption("Display data in the Streamlit app")
-    
+
 channel_id = sl.text_input("Enter the Channel id")
 channels = channel_id.split(',')
 channels = [ch.strip() for ch in channels if ch]
@@ -514,11 +517,11 @@ if sl.button("Fetch data"):
         else:
             output = channel_details(channel)
             sl.success(output)
-            
+
 if sl.button("Insert to SQL"):
     display = tables()
     sl.success(display)
-    
+
 show_table = sl.radio("SELECT THE TABLE FOR VIEW",(":green[channels]",":orange[playlists]",":red[videos]",":blue[comments]"))
 
 if show_table == ":green[channels]":
@@ -531,7 +534,7 @@ elif show_table == ":blue[comments]":
     show_comments_table()
 
 # SQL COnnection for Queries 
-    
+
 mydb = psycopg2.connect(host="localhost",
             user="postgres",
             password="nithiv1201",
@@ -539,7 +542,7 @@ mydb = psycopg2.connect(host="localhost",
             port = "5432"
             )
 cursor = mydb.cursor()
-    
+
 question = sl.selectbox(
     'Please Select Your Question',
     ('1. What are the names of all the videos and their corresponding channels',
